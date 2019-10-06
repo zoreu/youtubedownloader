@@ -11,7 +11,7 @@
 // @license         CC BY-SA
 // @license         https://creativecommons.org/licenses/by-sa/4.0
 // @match          *://*.youtube.com/*
-// @namespace https://greasyfork.org/users/371031
+// @namespace https://raw.githubusercontent.com/zoreu/youtubedownloader/master/youtubedownloaderpro.js
 // ==/UserScript==
 
 (function() {
