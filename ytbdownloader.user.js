@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        Youtube Downloader Pro
-// @version     0.2
+// @version     0.3
 // @date        2019-10-16
 // @description Download any video and music (audio) from Youtube.
 // @author      zoreu
@@ -75,10 +75,10 @@ function Addytpolymer() {
    //  addButton.href = "https://convyoutube.com/" + window.location.href;
    // link = window.location.href
     /////////////////////////////////////////////////////////////////////
-    //link2 = link.replace("https://www.youtube.com/", "");
-    link2 = link.replace("https://www.youtube.com/watch", "");
-   //addButton.href = "https://convyoutube.com/" + link2;
-    addButton.href = "https://converto.io/" + link2;
+    link2 = link.replace("https://www.youtube.com/", "");
+    //link2 = link.replace("https://www.youtube.com/watch", "");
+   addButton.href = "https://convyoutube.com/" + link2;
+    //addButton.href = "https://converto.io/" + link2;
     ///////////////////////////////////////////////////////////////////
     addButton.target = "_blank";
     buttonDiv.appendChild(addButton);
