@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        Youtube Downloader Pro
-// @version     0.5
+// @version     0.6
 // @date        2019-10-24
 // @description Download any video and music (audio) from Youtube.
 // @author      zoreu
@@ -54,7 +54,7 @@ function AddhtmlDV() {
 function Addytpolymer() {
     var buttonDiv = document.createElement("span");
     var link = window.location.href;
-    var link2;
+    var link2 = link.replace("https://www.youtube.com/watch?v=", "");
     buttonDiv.style.width = "100%";
     buttonDiv.id = "distillvideo";
     var addButton = document.createElement("a");
@@ -71,15 +71,14 @@ function Addytpolymer() {
     addButton.style.borderRadius = "2px";
     addButton.style.fontFamily = "Roboto, Arial, sans-serif";
     addButton.style.textDecoration = "none";
-   // addButton.href = "https://converto.io/" + window.location.href;
-   //  addButton.href = "https://convyoutube.com/" + window.location.href;
-   // link = window.location.href
+    // addButton.href = "https://converto.io/" + window.location.href;
+    //  addButton.href = "https://convyoutube.com/" + window.location.href;
+    // link = window.location.href
     /////////////////////////////////////////////////////////////////////
-  //ANTIGO  link2 = link.replace("https://www.youtube.com/", "");
+    //ANTIGO  link2 = link.replace("https://www.youtube.com/", "");
     //link2 = link.replace("https://www.youtube.com/watch", "");
- //ANTIGO  addButton.href = "https://convyoutube.com/" + link2;
+    //ANTIGO  addButton.href = "https://convyoutube.com/" + link2;
     //addButton.href = "https://converto.io/" + link2;
-    link2 = link.replace("https://www.youtube.com/watch?v=", "");
     addButton.href = "https://y2mate.com/pt1/youtube/" + link2;
     ///////////////////////////////////////////////////////////////////
     addButton.target = "_blank";
