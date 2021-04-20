@@ -1,6 +1,7 @@
 ### Youtube Downloader Pro
 
 #### Requirements:
-#### Tampermonkey or Gresasemonkey installed on your browser
+#### Tampermonkey
+#### [Chrome](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) | [Firefox](https://addons.mozilla.org/en-US/firefox/addon/tampermonkey/)
 
-### [Install](http://raw.github.com/zoreu/youtubedownloader/master/ytbdownloader.user.js) 
+### [Install youtube downloader](http://raw.github.com/zoreu/youtubedownloader/master/ytbdownloader.user.js) 
