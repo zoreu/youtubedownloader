@@ -17,7 +17,6 @@
 
 (function() { //ABERTURA
     'use strict';
-    alert(window.location.href.indexOf("watch?v="));
     if (document.getElementById("polymer-app") || document.getElementById("masthead") || window.Polymer) {
     setInterval(function() {//ABRIR INTERVAL
         if (window.location.href.indexOf("watch?v=") < 0) { //ABRIR IF
