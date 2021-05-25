@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        Easy Youtube Downloader
-// @version     1.0.0
-// @date        2019-10-24
+// @version     1.0.1
+// @date        2021-05-25
 // @description Download any video and music (audio) from Youtube.
 // @author      zoreu
 // @compatible chrome
@@ -30,8 +30,13 @@
 ////////// BOTAO //////////////////////
 function Addytpolymer() {
     var buttonDiv = document.createElement("span");
-    var link = window.location.href;
-    var link2 = link.replace("https://www.youtube.com/watch?v=", "");
+    var video_id = window.location.search.split('v=')[1];
+    var ampersandPosition = video_id.indexOf('&');
+    if(ampersandPosition != -1) {
+        video_id = video_id.substring(0, ampersandPosition);
+    }
+    //var link = window.location.href;
+    //var link2 = link.replace("https://www.youtube.com/watch?v=", "");
     buttonDiv.style.width = "100%";
     buttonDiv.id = "distillvideo";
     var addButton = document.createElement("a");
@@ -48,7 +53,7 @@ function Addytpolymer() {
     addButton.style.borderRadius = "2px";
     addButton.style.fontFamily = "Roboto, Arial, sans-serif";
     addButton.style.textDecoration = "none";
-    addButton.href = "https://y2mate.com/pt/youtube/" + link2;
+    addButton.href = "https://y2mate.com/pt/youtube/" + video_id;
     ///////////////////////////////////////////////////////////////////
     addButton.target = "_blank";
     buttonDiv.appendChild(addButton);
