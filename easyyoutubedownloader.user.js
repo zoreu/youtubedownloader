@@ -15,56 +15,55 @@
 // ==/UserScript==
 
 
-(function() { //ABERTURA
-    'use strict';
-    if (document.getElementById("polymer-app") || document.getElementById("masthead") || window.Polymer) {
-    setInterval(function() {//ABRIR INTERVAL
-        if (window.location.href.indexOf("watch?v=") < 0) { //ABRIR IF
-            return false;
-        }//FECHAR IF
-        if (document.getElementById("count") && document.getElementById("distillvideo") === null) { //ABRIR IF
-            Addytpolymer();
-        } //FEFHAR IF
-    }, 100);//FECHAR INTERVAL
-    }//FECHAR PRIMEIRO IF
-////////// BOTAO //////////////////////
-function Addytpolymer() {
-    var buttonDiv = document.createElement("span");
-    var video_id = window.location.search.split('v=')[1];
-    var ampersandPosition = video_id.indexOf('&');
-    if(ampersandPosition != -1) {
-        video_id = video_id.substring(0, ampersandPosition);
-    }
-    //var link = window.location.href;
-    //var link2 = link.replace("https://www.youtube.com/watch?v=", "");
-    buttonDiv.style.width = "100%";
-    buttonDiv.id = "distillvideo";
-    var addButton = document.createElement("a");
-    addButton.appendChild(document.createTextNode("MP3/4"));
-    addButton.style.width = "100%";
-    addButton.style.backgroundColor = "#CC0000";
-    addButton.style.color = "white";
-    addButton.style.textAlign = "center";
-    addButton.style.padding = "2px 10px";
-    addButton.style.margin = "0px 10px";
-    addButton.style.fontSize = "13px";
-    addButton.style.border = "0";
-    addButton.style.cursor = "pointer";
-    addButton.style.borderRadius = "2px";
-    addButton.style.fontFamily = "Roboto, Arial, sans-serif";
-    addButton.style.textDecoration = "none";
-    addButton.href = "https://y2mate.com/pt/youtube/" + video_id;
-    ///////////////////////////////////////////////////////////////////
-    addButton.target = "_blank";
-    buttonDiv.appendChild(addButton);
-    var targetElement = document.querySelectorAll("[id='count']");
-    for (var i = 0; i < targetElement.length; i++) {
-        if (targetElement[i].className.indexOf("ytd-video-primary-info-renderer") > -1) {
-            targetElement[i].appendChild(buttonDiv);
+var AKoiMain = {
+    oXHttpReq: null,
+    vid: null,
+    oldUrl: null,
+    DocOnLoad: function(o) {
+        try {
+            if (null != o && null != o.body && null != o.location && (AKoiMain.vid = AKoiMain.getVid(o), AKoiMain.vid)) {
+                o.querySelector("#meta #notification-preference-button").setAttribute("style", "flex-wrap: wrap;");
+                var t = o.querySelector("#notification-preference-button"),
+                    e = o.querySelector("#y2mateconverter"),
+                    n = AKoiMain.GetCommandButton();
+                null == e && (null != t ? t.parentNode.insertBefore(n, t) : (t = o.querySelector("#eow-title")).parentNode.insertBefore(n, t)), AKoiMain.oldUrl = o.location.href, AKoiMain.checkChangeVid()
+            }
+            return !0
+        } catch (o) {
+            console.log("Ошибка в функции Y2mate.DocOnLoad. ", o)
         }
+    },
+    checkChangeVid: function() {
+        setTimeout(function() {
+            AKoiMain.oldUrl == window.location.href ? AKoiMain.checkChangeVid() : AKoiMain.WaitLoadDom(window.document)
+        }, 1e3)
+    },
+    WaitLoadDom: function(o) {
+        AKoiMain.vid = AKoiMain.getVid(o), AKoiMain.vid ? null != o.querySelector("#meta #notification-preference-button") ? AKoiMain.DocOnLoad(o) : setTimeout(function() {
+            AKoiMain.WaitLoadDom(o)
+        }, 1e3) : AKoiMain.checkChangeVid()
+    },
+    goToY2mate: function(o) {
+        try {
+            var t = "https://y2mate.com/youtube/" + AKoiMain.vid + "/?utm_source=chrome_addon";
+            window.open(t, "_blank")
+        } catch (o) {
+            console.log("Ошибка в функции Y2mate.OnButtonClick. ", o)
+        }
+    },
+    GetCommandButton: function() {
+        try {
+            var o = document.createElement("button");
+            return o.id = "y2mateconverter", o.className = "yt-uix-tooltip", o.setAttribute("type", "button"), o.setAttribute("title", "Download by @ysEnma in Telegram"), o.innerHTML = "Download", o.addEventListener("click", function(o) {
+                AKoiMain.goToY2mate(o)
+            }, !0), o.setAttribute("style", "min-height:25px; position:relative; cursor: pointer; font: 13px Arial; background: #FC0A0A; color: #fff; text-transform: uppercase; display: block; padding: 10px 16px; margin:7px 7px; border: 1px solid #FC0A0A; border-radius: 2px; font-weight:bold"), o.setAttribute("onmouseover", "this.style.backgroundColor='#FC0A0A'"), o.setAttribute("onmouseout", "this.style.backgroundColor='#FC0A0A'"), o
+        } catch (o) {
+            console.log("Ошибка в функции Y2mate.GetCommandButton. ", o)
+        }
+    },
+    getVid: function(o) {
+        var t = o.location.toString().match(/^.*((m\.)?youtu\.be\/|vi?\/|u\/\w\/|embed\/|\?vi?=|\&vi?=)([^#\&\?]*).*/);
+        return !(!t || !t[3]) && t[3]
     }
-}
-///////////////////////////////////////
-} //FECHAR ABERTURA
-) //FHECAR FUNÇÃO
-();//AUTO CHAMAR FUNÇÃO DE ABERTURA
+};
+AKoiMain.WaitLoadDom(window.document);
