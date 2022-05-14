@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        Easy Youtube Downloader
-// @version     1.0.1
-// @date        2021-05-25
+// @version     1.0.2
+// @date        2022-05-14
 // @description Download any video and music (audio) from Youtube.
 // @author      zoreu
 // @compatible chrome
