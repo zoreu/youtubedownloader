@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        Easy Youtube Downloader
-// @version     1.0.5
-// @date        2023-10-29
+// @version     1.0.6
+// @date        2024-10-30
 // @description Download any video and music (audio) from Youtube.
 // @author      zoreu
 // @compatible chrome
@@ -20,7 +20,7 @@
 
 if ("undefined" == typeof(punisherYT)) {
    var punisherYT = {
-      currentLink: '//www.y2mate.com/youtube',
+      currentLink: '//y2meta.is/download/?videoId=',
       currentMedia: null,
       init: function() {
          punisherYT.pageLoad();
@@ -30,7 +30,9 @@ if ("undefined" == typeof(punisherYT)) {
             var tubeID = RegExp.lastMatch.substr(2);
             var newInterface = $('#meta-contents');
             if (newInterface) {
-               var addButton = $(`<div class="style-scope ytd-watch-metadata" id="punisherYT" style=""><button class="yt-spec-button-shape-next yt-spec-button-shape-next--filled yt-spec-button-shape-next--mono yt-spec-button-shape-next--size-m" type="button" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false" style="padding: 10px; margin: 10px;"><a class="style-scope ytd-subscribe-button-renderer text-white" style="text-decoration: none; color: red; padding-left: 3px; padding-right: 3px" target="_blank" href="`+ punisherYT.currentLink + `/` + tubeID +`"><i class="fas fa-download"></i>Download</a></div>`);
+               //var addButton = $(`<div class="style-scope ytd-watch-metadata" id="punisherYT" style=""><button class="yt-spec-button-shape-next yt-spec-button-shape-next--filled yt-spec-button-shape-next--mono yt-spec-button-shape-next--size-m" type="button" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false" style="padding: 10px; margin: 10px;"><a class="style-scope ytd-subscribe-button-renderer text-white" style="text-decoration: none; color: red; padding-left: 3px; padding-right: 3px" target="_blank" href="`+ punisherYT.currentLink + `/` + tubeID +`"><i class="fas fa-download"></i>Download</a></div>`);
+               // new site download
+               var addButton = $(`<div class="style-scope ytd-watch-metadata" id="punisherYT" style=""><button class="yt-spec-button-shape-next yt-spec-button-shape-next--filled yt-spec-button-shape-next--mono yt-spec-button-shape-next--size-m" type="button" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false" style="padding: 10px; margin: 10px;"><a class="style-scope ytd-subscribe-button-renderer text-white" style="text-decoration: none; color: red; padding-left: 3px; padding-right: 3px" target="_blank" href="`+ punisherYT.currentLink + tubeID +`"><i class="fas fa-download"></i>Download</a></div>`);
                var subsBtn = document.querySelector("#subscribe-button")
                subsBtn.parentNode.insertBefore(addButton[0], subsBtn)
             }
