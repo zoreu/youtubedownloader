@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        Easy Youtube Downloader for Chrome
-// @version     0.0.1
-// @date        2023-10-29
+// @version     0.0.2
+// @date        2024-10-30
 // @description Download any video and music (audio) from Youtube.
 // @author      zoreu
 // @compatible chrome
@@ -20,7 +20,7 @@
     function createDownloadButton(videoId) {
         const button = document.createElement('a');
         button.innerText = 'Download';
-        button.href = `https://www.y2mate.com/youtube/${videoId}`;
+        button.href = `https://y2meta.is/download/?videoId=${videoId}`;
         button.target = '_blank';
         button.style.margin = '10px';
         button.style.padding = '5px 10px';
