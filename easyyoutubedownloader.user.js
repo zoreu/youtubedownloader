@@ -3,19 +3,16 @@
 // @version     1.0.7
 // @date        2025-09-25
 // @description Download any video and music (audio) from Youtube.
-// @author      zoreu
 // @compatible chrome
 // @compatible firefox
 // @compatible opera
 // @compatible safari
 // @compatible edge
 // @compatible brave
-// @license         CC BY-SA
-// @license         https://creativecommons.org/licenses/by-sa/4.0
-// @match          *://*.youtube.com/*
-// @namespace https://raw.githubusercontent.com/zoreu/youtubedownloader/master/easyyoutubedownloader.user.js
-// @require https://code.jquery.com/jquery-2.2.4.min.js
-// @run-at document-end
+// @author       zoreu
+// @match        *://*.youtube.com/*
+// @grant        none
+// @run-at       document-idle
 // ==/UserScript==
 
 (function() {
