@@ -20,7 +20,7 @@
 
 if ("undefined" == typeof(punisherYT)) {
    var punisherYT = {
-      currentLink: '//y2meta.is/download/?videoId=',
+      currentLink: '//ssyoutube.com/watch?v=',
       currentMedia: null,
       init: function() {
          punisherYT.pageLoad();
