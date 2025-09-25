@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name        Easy Youtube Downloader
-// @version     1.0.8
+// @version     1.1.0
 // @date        2025-09-25
-// @description Download any video and music (audio) from Youtube.
+// @description Download any video and music (audio) from Youtube, funciona também em playlists.
 // @compatible chrome
 // @compatible firefox
 // @compatible opera
@@ -24,7 +24,7 @@
         return urlParams.get('v');
     }
 
-    // Função para verificar se é um tema escuro
+    // Função para verificar se é tema escuro
     function isDarkTheme() {
         return document.documentElement.hasAttribute('dark');
     }
@@ -37,8 +37,9 @@
         const container = document.querySelector('#end');
         if (!container) return;
 
-        // Verifica se o botão já foi inserido
-        if (document.getElementById('ss-download-btn')) return;
+        // Remove botão antigo (caso já exista)
+        const old = document.getElementById('ss-download-wrapper');
+        if (old) old.remove();
 
         // Cria o wrapper para o botão
         const wrapper = document.createElement('div');
@@ -65,7 +66,7 @@
         downloadBtn.style.textDecoration = 'none';
         downloadBtn.style.font = 'var(--btn-font)';
 
-        // Adiciona o ícone SVG
+        // Ícone SVG
         const downloadSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         downloadSvg.setAttribute('viewBox', '0 0 24 24');
         downloadSvg.setAttribute('width', '24');
@@ -88,14 +89,14 @@
         downloadSvg.appendChild(path2);
         downloadSvg.appendChild(path3);
 
-        // Adiciona o texto do botão
+        // Texto do botão
         const downloadSpan = document.createElement('span');
         downloadSpan.textContent = 'Download';
 
         downloadBtn.appendChild(downloadSvg);
         downloadBtn.appendChild(downloadSpan);
 
-        // Efeitos de hover
+        // Efeito hover
         downloadBtn.addEventListener('mouseenter', () => {
             downloadBtn.style.backgroundColor = 'var(--btn-hover-bg)';
         });
@@ -106,7 +107,7 @@
         wrapper.appendChild(downloadBtn);
         container.insertAdjacentElement('afterbegin', wrapper);
 
-        // Adiciona o CSS
+        // CSS dinâmico
         const darkTheme = isDarkTheme();
         const style = document.createElement('style');
         style.textContent = `
@@ -130,16 +131,37 @@
         document.head.appendChild(style);
     }
 
-    // Observa mudanças na URL (SPA do YouTube)
-    let lastUrl = location.href;
-    new MutationObserver(() => {
-        const currentUrl = location.href;
-        if (currentUrl !== lastUrl) {
-            lastUrl = currentUrl;
-            setTimeout(insertDownloadButton, 1000);
-        }
-    }).observe(document, {subtree: true, childList: true});
+    // Detecta mudanças de URL (SPA YouTube)
+    function observeUrlChange(callback) {
+        let oldHref = document.location.href;
+        const body = document.querySelector("body");
+        const observer = new MutationObserver(() => {
+            if (oldHref !== document.location.href) {
+                oldHref = document.location.href;
+                callback();
+            }
+        });
+        observer.observe(body, { childList: true, subtree: true });
 
-    // Executa inicialmente
+        // Hooka pushState e replaceState
+        const pushState = history.pushState;
+        history.pushState = function() {
+            pushState.apply(this, arguments);
+            callback();
+        };
+        const replaceState = history.replaceState;
+        history.replaceState = function() {
+            replaceState.apply(this, arguments);
+            callback();
+        };
+        window.addEventListener('popstate', callback);
+    }
+
+    // Inicializa
+    observeUrlChange(() => {
+        setTimeout(insertDownloadButton, 1000);
+    });
+
+    // Executa na primeira carga
     setTimeout(insertDownloadButton, 1500);
 })();
