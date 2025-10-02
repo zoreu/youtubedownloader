@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        Easy Youtube Downloader
-// @version     1.1.0
+// @version     1.1.1
 // @date        2025-09-25
 // @description Download any video and music (audio) from Youtube, funciona também em playlists.
 // @compatible chrome
@@ -52,7 +52,8 @@
         // Cria o botão de download
         const downloadBtn = document.createElement('a');
         downloadBtn.id = 'ss-download-btn';
-        downloadBtn.href = `https://youtubepp.com/watch?v=${videoId}`;
+        //downloadBtn.href = `https://youtubepp.com/watch?v=${videoId}`;
+        downloadBtn.href = `https://y2mates.com/youtube/${videoId}`;
         downloadBtn.target = '_blank';
         downloadBtn.style.display = 'inline-flex';
         downloadBtn.style.alignItems = 'center';
