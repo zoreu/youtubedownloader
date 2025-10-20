@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name        Easy Youtube Downloader
-// @version     1.1.1
-// @date        2025-09-25
-// @description Download any video and music (audio) from Youtube, funciona também em playlists.
+// @version     1.1.5
+// @date        2025-10-20
+// @description Download any video and music (audio) from Youtube, com menu MP3/MP4 que fecha ao clicar fora ou em uma opção.
 // @compatible chrome
 // @compatible firefox
 // @compatible opera
@@ -11,25 +11,22 @@
 // @compatible brave
 // @author       zoreu
 // @match        *://*.youtube.com/*
-// @grant        none
+// @grant       none
 // @run-at       document-idle
 // ==/UserScript==
 
 (function() {
     'use strict';
 
-    // Função para extrair o ID do vídeo da URL
     function getYouTubeVideoID() {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get('v');
     }
 
-    // Função para verificar se é tema escuro
     function isDarkTheme() {
         return document.documentElement.hasAttribute('dark');
     }
 
-    // Função para criar e inserir o botão
     function insertDownloadButton() {
         const videoId = getYouTubeVideoID();
         if (!videoId) return;
@@ -37,11 +34,9 @@
         const container = document.querySelector('#end');
         if (!container) return;
 
-        // Remove botão antigo (caso já exista)
         const old = document.getElementById('ss-download-wrapper');
         if (old) old.remove();
 
-        // Cria o wrapper para o botão
         const wrapper = document.createElement('div');
         wrapper.id = 'ss-download-wrapper';
         wrapper.style.display = 'flex';
@@ -49,12 +44,9 @@
         wrapper.style.marginRight = '10px';
         wrapper.style.position = 'relative';
 
-        // Cria o botão de download
         const downloadBtn = document.createElement('a');
         downloadBtn.id = 'ss-download-btn';
-        //downloadBtn.href = `https://youtubepp.com/watch?v=${videoId}`;
-        downloadBtn.href = `https://y2mates.com/youtube/${videoId}`;
-        downloadBtn.target = '_blank';
+        downloadBtn.href = '#';
         downloadBtn.style.display = 'inline-flex';
         downloadBtn.style.alignItems = 'center';
         downloadBtn.style.padding = '0 12px 0 8px';
@@ -67,7 +59,6 @@
         downloadBtn.style.textDecoration = 'none';
         downloadBtn.style.font = 'var(--btn-font)';
 
-        // Ícone SVG
         const downloadSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
         downloadSvg.setAttribute('viewBox', '0 0 24 24');
         downloadSvg.setAttribute('width', '24');
@@ -90,25 +81,67 @@
         downloadSvg.appendChild(path2);
         downloadSvg.appendChild(path3);
 
-        // Texto do botão
         const downloadSpan = document.createElement('span');
         downloadSpan.textContent = 'Download';
 
         downloadBtn.appendChild(downloadSvg);
         downloadBtn.appendChild(downloadSpan);
 
-        // Efeito hover
-        downloadBtn.addEventListener('mouseenter', () => {
-            downloadBtn.style.backgroundColor = 'var(--btn-hover-bg)';
-        });
-        downloadBtn.addEventListener('mouseleave', () => {
-            downloadBtn.style.backgroundColor = 'var(--btn-bg)';
+        // Menu flutuante maior
+        const menu = document.createElement('div');
+        menu.style.position = 'absolute';
+        menu.style.top = '42px';
+        menu.style.left = '0';
+        menu.style.width = '150px';
+        menu.style.backgroundColor = isDarkTheme() ? '#272727' : '#f2f2f2';
+        menu.style.border = '1px solid #888';
+        menu.style.borderRadius = '8px';
+        menu.style.boxShadow = '0 2px 8px rgba(0,0,0,0.25)';
+        menu.style.padding = '6px 0';
+        menu.style.display = 'none';
+        menu.style.flexDirection = 'column';
+        menu.style.zIndex = 9999;
+
+        const createMenuButton = (text, href) => {
+            const btn = document.createElement('a');
+            btn.href = href;
+            btn.target = '_blank';
+            btn.textContent = text;
+            btn.style.padding = '8px 12px';
+            btn.style.color = isDarkTheme() ? '#fff' : '#000';
+            btn.style.textDecoration = 'none';
+            btn.style.cursor = 'pointer';
+            btn.style.fontWeight = '500';
+            btn.addEventListener('mouseenter', () => btn.style.backgroundColor = isDarkTheme() ? '#3f3f3f' : '#e5e5e5');
+            btn.addEventListener('mouseleave', () => btn.style.backgroundColor = 'transparent');
+
+            // Fecha o menu ao clicar
+            btn.addEventListener('click', () => {
+                menu.style.display = 'none';
+            });
+
+            return btn;
+        };
+
+        menu.appendChild(createMenuButton('Baixar MP3', `https://ytmp3.cx/#${videoId}/mp3`));
+        menu.appendChild(createMenuButton('Baixar MP4', `https://ytmp3.cx/#${videoId}/mp4`));
+
+        downloadBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
         });
 
         wrapper.appendChild(downloadBtn);
+        wrapper.appendChild(menu);
         container.insertAdjacentElement('afterbegin', wrapper);
 
-        // CSS dinâmico
+        // Fecha menu ao clicar fora
+        document.addEventListener('click', (e) => {
+            if (!wrapper.contains(e.target)) {
+                menu.style.display = 'none';
+            }
+        });
+
         const darkTheme = isDarkTheme();
         const style = document.createElement('style');
         style.textContent = `
@@ -132,7 +165,6 @@
         document.head.appendChild(style);
     }
 
-    // Detecta mudanças de URL (SPA YouTube)
     function observeUrlChange(callback) {
         let oldHref = document.location.href;
         const body = document.querySelector("body");
@@ -144,7 +176,6 @@
         });
         observer.observe(body, { childList: true, subtree: true });
 
-        // Hooka pushState e replaceState
         const pushState = history.pushState;
         history.pushState = function() {
             pushState.apply(this, arguments);
@@ -158,11 +189,9 @@
         window.addEventListener('popstate', callback);
     }
 
-    // Inicializa
     observeUrlChange(() => {
         setTimeout(insertDownloadButton, 1000);
     });
 
-    // Executa na primeira carga
     setTimeout(insertDownloadButton, 1500);
 })();
